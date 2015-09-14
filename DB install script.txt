@@ -1,0 +1,27 @@
+CREATE table "AP_STD_V1" (
+    "PROCESS_INSTANCE_ID" NUMBER NOT NULL,
+    "BF_UPLOADDATE"       DATE,
+    "BF_CREATORNAME"      VARCHAR2(4000),
+    "BF_PROCESSNAME"      VARCHAR2(4000),
+    "BF_LOCATIONAME"      VARCHAR2(4000),
+    "AMOUNT"              NUMBER,
+    "BF_INVOICEDATE"      DATE,
+    "PONUMBER"            VARCHAR2(4000),
+    "INVOICENUMBER"       VARCHAR2(4000),
+    "VENDORNAME"          VARCHAR2(4000),
+    "VENDOREMAIL"         VARCHAR2(4000),
+    "PAYMENTDAT"          DATE,
+    constraint  "AP_STD_V1_PK" primary key ("PROCESS_INSTANCE_ID")
+)
+/
+
+CREATE sequence "AP_STD_V1_SEQ" 
+/
+
+CREATE trigger "BI_AP_STD_V1"  
+  before insert on "AP_STD_V1"              
+  for each row 
+begin  
+    select "AP_STD_V1_SEQ".nextval into :NEW.PROCESS_INSTANCE_ID from dual;
+end;
+/   

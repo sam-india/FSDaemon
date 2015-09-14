@@ -1,0 +1,123 @@
+/**
+ * 
+ */
+package common;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+/**
+ * @author Sajal
+ *
+ */
+
+public class DBConnect {
+	
+	String DriverName = "oracle.jdbc.driver.OracleDriver";
+	String DBurl = "jdbc:oracle:thin:@localhost:1521:xe";
+	String UserName = "hr";
+	String Pwd = "sajal";
+	String sql = "select employees_id,first_name,last_name from employee";
+	Connection con;
+	Statement st;
+	ResultSet rs;
+	
+	DBConnect()
+	{
+		OpenConnection(DBurl,UserName,Pwd);
+		executequery(sql);
+		TraverseData();
+		CloseConnection();
+		
+	}
+		
+	public void OpenConnection(String url,String user,String password)
+	{
+		try
+		{
+		Class.forName(DriverName);
+		con = DriverManager.getConnection(url, user, password);
+		st = con.createStatement();
+		System.out.println("Created DB Connection....");
+		}
+		catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	} 
+
+	public void executequery(String query)
+	{
+		try {
+			rs = st.executeQuery(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void TraverseData()
+	{
+		try 
+		{
+		while(rs.next())
+		{
+		//Retrieve by column name
+		int id;
+		id = rs.getInt("employees_id");
+		String fname = rs.getString("first_name");
+		String last = rs.getString("last_name");
+		//Display values
+		System.out.print("ID: " + id);
+		System.out.print(", First: " + fname);
+		System.out.println(", Last: " + last);
+		}
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	public void CloseConnection()
+	{
+		try {
+			con.close();
+			System.out.println("DB Connection Closed Successfully....");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}
+//Class.forName("oracle.jdbc.driver.OracleDriver");
+//Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr","sajal");
+//Statement st = con.createStatement();
+//System.out.println("Created DB Connection....");
+//String sql;
+//  sql = "select employees_id,first_name,last_name from employee";
+//  ResultSet rs = st.executeQuery(sql);
+//  while(rs.next()){
+//      //Retrieve by column name
+//      int id  = rs.getInt("employees_id");
+//      String fname = rs.getString("first_name");
+//      String last = rs.getString("last_name");
+//
+//      //Display values
+//      System.out.print("ID: " + id);
+//      System.out.print(", First: " + fname);
+//      System.out.println(", Last: " + last);
